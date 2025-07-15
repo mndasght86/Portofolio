@@ -1,11 +1,27 @@
-[phases.setup]
-nixPkgs = ["php82", "php82Packages.composer"]
+# nixpacks.toml (Versi yang Benar)
 
-[phases.build]
-cmds = [
-  "composer install --no-dev --optimize-autoloader",
-  "php artisan config:cache"
+# Bagian ini menginstal PHP, Composer, dan ekstensi yang dibutuhkan
+[phases.setup]
+nixPkgs = ["php82", "composer"]
+nixPkgsExtensions = [
+    "php82Extensions.bcmath",
+    "php82Extensions.ctype",
+    "php82Extensions.curl",
+    "php82Extensions.dom",
+    "php82Extensions.fileinfo",
+    "php82Extensions.mbstring",
+    "php82Extensions.openssl",
+    "php82Extensions.pdo",
+    "php82Extensions.pdo_pgsql", # Penting untuk PostgreSQL
+    "php82Extensions.tokenizer",
+    "php82Extensions.xml",
+    "php82Extensions.json"
 ]
 
+# Bagian ini menjalankan composer install. Nama phase HARUS 'install'
+[phases.install]
+cmds = ["composer install --no-dev --optimize-autoloader --no-progress"]
+
+# Bagian ini menjalankan server web produksi (Apache), BUKAN artisan serve
 [phases.start]
-cmd = "php artisan serve --host=0.0.0.0 --port=${PORT}"
+cmd = "vendor/bin/heroku-php-apache2 public/"
