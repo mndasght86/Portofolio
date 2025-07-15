@@ -1,0 +1,25 @@
+# nixpacks.toml
+
+[phases.setup]
+nixPkgs = ["php82", "composer"]
+# Daftar ekstensi PHP yang umum dibutuhkan oleh Laravel
+nixPkgsExtensions = [
+    "php82Extensions.bcmath",
+    "php82Extensions.ctype",
+    "php82Extensions.curl",
+    "php82Extensions.dom",
+    "php82Extensions.fileinfo",
+    "php82Extensions.mbstring",
+    "php82Extensions.openssl",
+    "php82Extensions.pdo",
+    "php82Extensions.pdo_pgsql", # Penting untuk PostgreSQL
+    "php82Extensions.tokenizer",
+    "php82Extensions.xml",
+    "php82Extensions.json"
+]
+
+[phases.install]
+cmds = ["composer install --no-dev --optimize-autoloader"]
+
+[phases.start]
+cmd = "vendor/bin/heroku-php-apache2 public/"
